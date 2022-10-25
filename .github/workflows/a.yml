@@ -1,0 +1,31 @@
+name: Publish release notes
+on:
+  repository_dispatch:
+    types: [release-notes]
+
+
+#  github.event.client_payload.commit_sha = github.sha
+#  github.event.client_payload.release_body = github.event.release.body
+#  github.event.client_payload.tag_name = github.event.release.tag_name
+#  github.event.client_payload.published_at = github.event.release.published_at
+#  Using httpie w/ jo:
+#    http 'https://api.github.com/repos/nhtzr/workflow-test/dispatches' \
+#      Accept:application/vnd.github.everest-preview+json \
+#      Authorization:"token test" \
+#      event_type=release-notes \
+#      client_payload:=@<(jo \
+#        commit_sha=09af \
+#        release_body=asdf \
+#        tag_name=v0.10.0 \
+#        published_at=2021-06-01T17:38:00Z)
+
+jobs:
+  publish-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print
+        run: |
+          echo ${{ github.event.client_payload.commit_sha }}
+          echo ${{ github.event.client_payload.release_body }}
+          echo ${{ github.event.client_payload.tag_name }}
+          echo ${{ github.event.client_payload.published_at }}
