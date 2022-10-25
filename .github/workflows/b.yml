@@ -1,0 +1,18 @@
+name: Publish release notes
+on:
+  release:
+    types: [edited]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.RELEASE_NOTES_TOKEN }}
+
+jobs:
+  publish-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delegate
+        env:
+          RELEASE_BODY:
+        run: |
+          curl https://api.github.com/repos/nhtzr/workflow-test/dispatches -H 'Accept: application/vnd.github.everest-preview+json' -H "Authorization: token $GITHUB_TOKEN" -H 'Content-Type: application/json; charset=utf-8' --data-binary @<(jq -n '{$event_type,client_payload:{$commit_sha,release_body: env.RELEASE_BODY,$tag_name,$published_at}}' --arg event_type release-notes --arg commit_sha 09af --arg tag_name v0.10.0 --arg published_at 2021-06-01T17:38:00Z)
+
